@@ -1,9 +1,11 @@
-import React from 'react'
-
+import React from "react";
+import Weather from "./Components/Weather";
 const App = () => {
   return (
-    <div className='font-bold'>App</div>
-  )
-}
+    <div>
+      <Weather />
+    </div>
+  );
+};
 
-export default App
+export default App;
