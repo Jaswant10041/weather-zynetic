@@ -127,6 +127,7 @@ const Weather = () => {
             </div>
           </div>
         )}
+        
         {<div className="font-medium text-2xl">{error}</div>}
         <div className="flex flex-col text-center h-45 w-40">
           <div className="font-medium text-2xl p-2 bg-gray-200 justify-center rounded-md">
@@ -134,7 +135,7 @@ const Weather = () => {
           </div>
           <ul>
             {history.length === 0 && (
-              <li className="font-md text-2xl bg-gray-200 p-2">No recent search</li>
+              <li className="font-md text-2xl bg-gray-200 p-2 rounded-md">No recent search</li>
             )}
             {history.map((item, index) => {
               if (index === 0) {
@@ -144,7 +145,7 @@ const Weather = () => {
                 <li
                   key={index}
                   onClick={() => handleSearch(item)}
-                  className="font-md text-2xl p-2 bg-gray-200"
+                  className="font-md text-2xl p-2 bg-gray-200 rounded-md"
                 >
                   {item}
                 </li>
