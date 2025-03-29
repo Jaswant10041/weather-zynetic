@@ -27,7 +27,7 @@ const Weather = () => {
     try {
       weatherData.isLoading = true;
       const response = await axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?q=${queryCity}&appid=bb60a37ba6d01f853b6bcd5f5899b110&units=metric`
+        `https://api.openweathermap.org/data/2.5/weather?q=${queryCity}&appid=&units=metric`
       );
       const { data } = response;
       console.log(data);
