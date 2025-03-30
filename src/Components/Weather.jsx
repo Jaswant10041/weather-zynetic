@@ -131,7 +131,7 @@ const Weather = () => {
         
         {<div className="font-medium text-2xl">{error}</div>}
         <div className="flex flex-col text-center h-45 w-40 mx-auto">
-          <div className="font-medium sm:text-2xl p-2 bg-gray-200 justify-center rounded-md m-2">
+          <div className="font-medium sm:text-2xl p-2 bg-gray-200 justify-center rounded-md">
             History
           </div>
           <ul>
