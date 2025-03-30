@@ -1,5 +1,6 @@
 import axios from "axios";
 // const apiKey = import.meta.env.VITE_API_KEY;
+import { FaSearch } from "react-icons/fa";
 import React, { useEffect, useState } from "react";
 const Weather = () => {
   const key='bb60a37ba6d01f853b6bcd5f5899b110';
@@ -75,67 +76,67 @@ const Weather = () => {
     fetchWeatherDetails();
   }, [queryCity]);
   return (
-    <div className="m-3">
-      <div className="flex justify-center mt-10">
-        <form className="flex" onSubmit={(e)=>e.preventDefault()}>
+    <div className="">
+      <div className="flex justify-center mx-auto">
+        <form className="flex mt-10" onSubmit={(e)=>e.preventDefault()}>
           <input
             type="text"
             placeholder=" Search "
-            className="border-2 border-indigo-600 w-md rounded-md p-2"
+            className="border-2 border-indigo-600 rounded-md md:w-md sm:w-sm w-54 p-2 text-xl"
             onChange={(e) => {
               setCity(e.target.value);
             }}
             value={city}
             required
           />
-          <div className="pl-1">
+          <div className="pl-2">
             <button
               onClick={() => handleSearch(city)}
-              className="border-2 border-emerald-400 p-2 rounded-md bg-gray-200"
+              className="border-2 border-indigo-400 rounded-md bg-gray-200 p-3 cursor-pointer hover:bg-gray-100"
             >
-              Search
+              <FaSearch className="text-xl"/>
             </button>
           </div>
         </form>
       </div>
-      <div className="flex justify-around mt-15 pt-15">
+      <div className="sm:flex justify-around mt-15 pt-15">
         {error === "" && (
-          <div className="flex flex-row text-center font-medium text-3xl mx-3">
-            <div className="flex flex-col p-2 mx-3 bg-gray-200 rounded-md justify-center h-45">
+          <div className="sm:flex flex-row text-center font-medium sm:text-3xl mx-auto">
+            <div className="flex flex-col p-2 bg-gray-200 mx-3 rounded-md justify-center m-2">
               <label>City Name </label>
-              <p>{weatherData?.cityName}</p>
+              <p className="pt-1">{weatherData?.cityName}</p>
             </div>
-            <div className="flex flex-col p-2 bg-gray-200 mx-3 rounded-md justify-center">
+            <div className="flex flex-col p-2 bg-gray-200 mx-3 rounded-md justify-center m-2">
               <label>Temperature </label>
-              <p>{weatherData?.cityTemperature} °C</p>
+              <p className="pt-1">{weatherData?.cityTemperature} °C</p>
             </div>
-            <div className="flex flex-col p-2 bg-gray-200 mx-3 rounded-md justify-center">
+            <div className="flex flex-col p-2 bg-gray-200 mx-3 rounded-md justify-center m-2">
               <label>Weather Condition </label>
-              <p>{weatherData?.cityWeatherCondition}</p>
+              <p className="pt-1">{weatherData?.cityWeatherCondition}</p>
             </div>
-            <div className="flex flex-col p-2 bg-gray-200 mx-3 rounded-md justify-center">
+            <div className="flex flex-col p-2 bg-gray-200 mx-3 rounded-md justify-center m-2">
               <label>Humidity </label>
-              <p>{weatherData?.cityHumidity}%</p>
+              <p className="pt-1">{weatherData?.cityHumidity}%</p>
             </div>
-            <div className="flex flex-col p-2 bg-gray-200 mx-3 rounded-md justify-center">
+            <div className="flex flex-col p-2 bg-gray-200 mx-3 rounded-md justify-center m-2">
               <label>Wind Speed </label>
-              <p>{weatherData?.cityWindSpeed} m/s</p>
+              <p className="pt-1">{weatherData?.cityWindSpeed} m/s</p>
             </div>
-            <div className="flex flex-col p-2 bg-gray-200 mx-2 rounded-md justify-center">
+            <div className="flex flex-col p-2 bg-gray-200 mx-3 rounded-md justify-center m-2">
               <label>Weather Icon </label>
-              <p>{weatherData?.cityWeatherIcon}</p>
+              <p className="pt-1">{weatherData?.cityWeatherIcon}</p>
             </div>
           </div>
         )}
         
         {<div className="font-medium text-2xl">{error}</div>}
-        <div className="flex flex-col text-center h-45 w-40">
-          <div className="font-medium text-2xl p-2 bg-gray-200 justify-center rounded-md">
+        <div className="flex flex-col text-center h-45 w-40 mx-auto">
+          <div className="font-medium sm:text-2xl p-2 bg-gray-200 justify-center rounded-md m-2">
             History
           </div>
           <ul>
             {history.length === 0 && (
-              <li className="font-md text-2xl bg-gray-200 p-2 rounded-md">No recent search</li>
+              <li className="font-md sm:text-2xl bg-gray-200 p-2 rounded-md">No recent search</li>
             )}
             {history.map((item, index) => {
               if (index === 0) {
