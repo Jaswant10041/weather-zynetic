@@ -1,7 +1,6 @@
 ## Features
 
 - Current weather conditions (temperature, humidity, wind speed)
-- 5-day weather forecast
 - City search functionality
 - Search history (last 6 searches)
 - Dark/light mode toggle
