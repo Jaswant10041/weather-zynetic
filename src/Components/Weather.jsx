@@ -76,13 +76,13 @@ const Weather = () => {
     fetchWeatherDetails();
   }, [queryCity]);
   return (
-    <div className="">
+    <div className="h-full w-full">
       <div className="flex justify-center mx-auto">
         <form className="flex mt-10" onSubmit={(e)=>e.preventDefault()}>
           <input
             type="text"
             placeholder=" Search "
-            className="border-2 border-indigo-600 rounded-md md:w-md sm:w-sm w-54 p-2 text-xl"
+            className="border-2 border-indigo-600 rounded-md md:w-md sm:w-sm w-54 p-2 text-sm sm:text-xl "
             onChange={(e) => {
               setCity(e.target.value);
             }}

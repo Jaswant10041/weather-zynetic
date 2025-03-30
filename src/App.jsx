@@ -2,7 +2,7 @@ import React from "react";
 import Weather from "./Components/Weather";
 const App = () => {
   return (
-    <div className="bg-red-200 w-dvw h-lvh">
+    <div className="">
       <Weather />
     </div>
   );
