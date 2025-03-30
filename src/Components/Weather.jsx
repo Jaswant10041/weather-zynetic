@@ -2,6 +2,7 @@ import axios from "axios";
 import { FaSearch } from "react-icons/fa";
 import React, { useEffect, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+// const apiKey = import.meta.env.VITE_API_KEY;
 const Weather = () => {
   const key = "bb60a37ba6d01f853b6bcd5f5899b110";
   const [city, setCity] = useState("");
@@ -26,7 +27,8 @@ const Weather = () => {
     cityWeatherIcon: "N/A",
   };
   const [weatherData, setWeatherData] = useState(initialValues);
-
+  console.log('All env vars:', import.meta.env);
+  // console.log(apiKey); // Should now work
   // Apply dark mode class and save preference
   useEffect(() => {
     if (darkMode) {
