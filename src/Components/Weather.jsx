@@ -1,12 +1,14 @@
 import axios from "axios";
 import { FaSearch } from "react-icons/fa";
 import React, { useEffect, useState } from "react";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import weatherForecast from "./weatherForecast";
+import Loader from "./Loader";
+import WeatherDetails from "./WeatherDetails";
 // const apiKey = import.meta.env.VITE_API_KEY;
 const Weather = () => {
   const key = "bb60a37ba6d01f853b6bcd5f5899b110";
   const [city, setCity] = useState("");
-  const [queryCity, setQueryCity] = useState("");
+  const [forecast,setForecast]=useState([]);
   const [history, setHistory] = useState([]);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -27,9 +29,6 @@ const Weather = () => {
     cityWeatherIcon: "N/A",
   };
   const [weatherData, setWeatherData] = useState(initialValues);
-  console.log('All env vars:', import.meta.env);
-  // console.log(apiKey); // Should now work
-  // Apply dark mode class and save preference
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add("dark");
@@ -41,13 +40,17 @@ const Weather = () => {
 
   function handleSearch(cityName) {
     if (cityName === "") {
-      setError("Enter valid city name");
+      setError("Invalid city name");
+      console.log("Invalid city name");
       return;
     }
     setIsLoading(true);
-    setTimeout(() => {
+    setTimeout(async() => {
       fetchWeatherDetails();
-    }, 1000);
+      const response=await weatherForecast(cityName);
+      setForecast(response);
+      setIsLoading(false);
+    }, 2000);
   }
 
   async function fetchWeatherDetails() {
@@ -79,11 +82,11 @@ const Weather = () => {
         history.remove(history[history.length - 1]);
         setHistory((prev) => [freshWeatherData.cityName, ...prev]);
       }
-      setIsLoading(false);
+      // setIsLoading(false);
     } catch (err) {
       const { status } = err;
       if (status === 404) {
-        setError("City Not found Enter valid City Name");
+        setError("City not found");
       }
       console.log(err);
       setIsLoading(false);
@@ -96,11 +99,10 @@ const Weather = () => {
         darkMode ? "dark bg-gray-900" : "bg-red-200"
       }`}
     >
-      {/* Dark Mode Toggle */}
       <div className="flex justify-end p-4">
         <button
           onClick={() => setDarkMode(!darkMode)}
-          className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 dark:text-white"
+          className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 dark:text-white cursor-pointer"
         >
           {darkMode ? "Light" : "Dark"}
         </button>
@@ -120,6 +122,7 @@ const Weather = () => {
           />
           <div className="pl-2">
             <button
+              disabled={isLoading}
               onClick={() => handleSearch(city)}
               className="border-2 border-indigo-400 rounded-md bg-gray-200 p-3 cursor-pointer hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white"
             >
@@ -130,9 +133,9 @@ const Weather = () => {
       </div>
 
       <div>
-        {isLoading !== true && (
+        {isLoading !== true ? (
           <div className="sm:flex justify-around">
-            {error === "" && (
+            {error === "" ? (
               <div className="">
                 <div className="flex justify-center mt-8">
                   <button
@@ -142,46 +145,7 @@ const Weather = () => {
                     Refresh
                   </button>
                 </div>
-                <div className="sm:flex flex-row text-center font-medium sm:text-3xl mx-auto mt-15 pt-15">
-                  <div className="flex flex-col p-2 bg-gray-200 mx-3 rounded-md justify-center m-2 dark:bg-gray-700 dark:text-white">
-                    <label className="dark:text-gray-300">City Name</label>
-                    <p className="pt-1">{weatherData?.cityName}</p>
-                  </div>
-                  <div className="flex flex-col p-2 bg-gray-200 mx-3 rounded-md justify-center m-2 dark:bg-gray-700 dark:text-white">
-                    <label className="dark:text-gray-300">Temperature</label>
-                    <p className="pt-1">{weatherData?.cityTemperature} °C</p>
-                  </div>
-                  <div className="flex flex-col p-2 bg-gray-200 mx-3 rounded-md justify-center m-2 dark:bg-gray-700 dark:text-white">
-                    <label className="dark:text-gray-300">
-                      Weather Condition
-                    </label>
-                    <p className="pt-1">{weatherData?.cityWeatherCondition}</p>
-                  </div>
-                  <div className="flex flex-col p-2 bg-gray-200 mx-3 rounded-md justify-center m-2 dark:bg-gray-700 dark:text-white">
-                    <label className="dark:text-gray-300">Humidity</label>
-                    <p className="pt-1">{weatherData?.cityHumidity}%</p>
-                  </div>
-                  <div className="flex flex-col p-2 bg-gray-200 mx-3 rounded-md justify-center m-2 dark:bg-gray-700 dark:text-white">
-                    <label className="dark:text-gray-300">Wind Speed</label>
-                    <p className="pt-1">{weatherData?.cityWindSpeed} m/s</p>
-                  </div>
-                  <div className="flex flex-col p-2 bg-gray-200 mx-3 rounded-md justify-center m-2 dark:bg-gray-700 dark:text-white">
-                    <label className="dark:text-gray-300">Weather Icon</label>
-                    {weatherData.cityWeatherIcon !== "N/A" ? (
-                      <img
-                        src={`http://openweathermap.org/img/w/${weatherData.cityWeatherIcon}.png`}
-                        alt="weather icon"
-                      />
-                    ) : (
-                      <p>{weatherData.cityWeatherIcon}</p>
-                    )}
-                  </div>
-                </div>
-                {
-                  <div className="font-medium text-2xl dark:text-white">
-                    {error}
-                  </div>
-                }
+                <WeatherDetails weatherData={weatherData} />
                 <div className="flex flex-col text-center h-45 w-40 mx-auto sm:my-2 my-20">
                   <div className="font-medium sm:text-2xl p-1 bg-gray-200 justify-center dark:bg-gray-700 dark:text-white">
                     History
@@ -209,16 +173,13 @@ const Weather = () => {
                   </ul>
                 </div>
               </div>
+            ) : (
+              <div className="font-semibold text-2xl my-60 bg-zinc-500 p-3 rounded-md">{error}</div>
             )}
           </div>
+        ) : (
+          <Loader isLoading={isLoading} />
         )}
-        <div className="mt-11 pt-13 mx-auto">
-          {isLoading === true && (
-            <div className="text-center flex justify-center">
-              <AiOutlineLoading3Quarters className="text-black mt-10" size={30}/>
-            </div>
-          )}
-        </div>
       </div>
     </div>
   );

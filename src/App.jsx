@@ -9,3 +9,8 @@ const App = () => {
 };
 
 export default App;
+//disabling button while loading
+//loader component
+//weatherDetails component
+//refresh button
+//fivedayforecast component
