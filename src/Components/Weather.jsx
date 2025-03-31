@@ -47,8 +47,8 @@ const Weather = () => {
     setIsLoading(true);
     setTimeout(async() => {
       fetchWeatherDetails();
-      const response=await weatherForecast(cityName);
-      setForecast(response);
+      // const response=await weatherForecast(cityName);
+      // setForecast(response);
       setIsLoading(false);
     }, 2000);
   }
@@ -174,7 +174,7 @@ const Weather = () => {
                 </div>
               </div>
             ) : (
-              <div className="font-semibold text-2xl my-60 bg-zinc-500 p-3 rounded-md">{error}</div>
+              <div className="font-semibold text-2xl my-50 bg-zinc-500 p-3 rounded-md">{error}</div>
             )}
           </div>
         ) : (
