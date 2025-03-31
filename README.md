@@ -2,7 +2,8 @@
 
 - Current weather conditions (temperature, humidity, wind speed)
 - City search functionality
-- Search history (last 6 searches)
+- 5 day forecast
+- Search history (last 5 searches)
 - Dark/light mode toggle
 - Responsive design (works on mobile and desktop)
 - Loading animations

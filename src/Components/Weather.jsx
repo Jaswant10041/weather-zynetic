@@ -13,7 +13,9 @@ const Weather = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(() => {
     const savedMode = localStorage.getItem("darkMode");
-    return savedMode ? JSON.parse(savedMode) : window.matchMedia("(prefers-color-scheme: dark)").matches;
+    return savedMode
+      ? JSON.parse(savedMode)
+      : window.matchMedia("(prefers-color-scheme: dark)").matches;
   });
 
   const initialWeatherData = {
@@ -43,7 +45,10 @@ const Weather = () => {
         `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${apiKey}&units=metric`
       );
       // Get one forecast per day (around midday)
-      return response.data.list.filter((_, index) => index % 8 === 0).slice(0, 5);
+      console.log(response.data.list);
+      return response.data.list
+        .filter((_, index) => index % 8 === 0)
+        .slice(0, 5);
     } catch (error) {
       console.error("Forecast error:", error);
       return [];
@@ -64,17 +69,15 @@ const Weather = () => {
       await fetchWeatherDetails(cityName);
       const forecastData = await fetchForecast(cityName);
       setForecast(forecastData);
+
       
-      // Update search history
-      setHistory(prev => {
-        const newHistory = [cityName, ...prev.filter(item => item !== cityName)];
-        return newHistory.slice(0, 6); // Keep only 6 most recent searches
-      });
     } catch (error) {
       console.error("Search error:", error);
-      setError(error.response?.status === 404 
-        ? "City not found" 
-        : "Error fetching weather data");
+      setError(
+        error.response?.status === 404
+          ? "City not found"
+          : "Error fetching weather data"
+      );
     } finally {
       setIsLoading(false);
     }
@@ -84,9 +87,11 @@ const Weather = () => {
   const fetchWeatherDetails = async (cityName) => {
     try {
       const response = await axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?q=${cityName || city}&appid=${apiKey}&units=metric`
+        `https://api.openweathermap.org/data/2.5/weather?q=${
+          cityName || city
+        }&appid=${apiKey}&units=metric`
       );
-      
+
       const { data } = response;
       if (!data) throw new Error("No data received");
 
@@ -96,8 +101,14 @@ const Weather = () => {
         cityHumidity: data.main.humidity,
         cityWindSpeed: data.wind.speed,
         cityWeatherCondition: data.weather[0].main,
-        cityWeatherIcon: data.weather[0].icon
+        cityWeatherIcon: data.weather[0].icon,
       });
+      if (history.length < 6) {
+        setHistory((prev) => [weatherData.cityName, ...prev]);
+      } else {
+        history.remove(history[history.length - 1]);
+        setHistory((prev) => [weatherData.cityName, ...prev]);
+      }
     } catch (error) {
       console.error("Weather fetch error:", error);
       throw error;
@@ -105,7 +116,11 @@ const Weather = () => {
   };
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${darkMode ? "dark bg-gray-900" : "bg-red-200"}`}>
+    <div
+      className={`min-h-screen min-w-screen transition-colors duration-300 ${
+        darkMode ? "dark bg-gray-900" : "bg-red-200"
+      }`}
+    >
       {/* Header with dark mode toggle */}
       <header className="flex justify-end p-4">
         <button
@@ -119,7 +134,7 @@ const Weather = () => {
 
       {/* Search bar */}
       <div className="flex justify-center mx-auto px-4">
-        <form 
+        <form
           className="flex w-full max-w-md mt-4"
           onSubmit={(e) => {
             e.preventDefault();
@@ -137,7 +152,7 @@ const Weather = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="ml-2 border-2 border-indigo-400 rounded-md bg-gray-200 p-3 cursor-pointer hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+            className="ml-2 border-2 border-indigo-400 rounded-md bg-gray-200 p-3 cursor-pointer hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white disabled:cursor-not-allowed"
           >
             <FaSearch className="text-xl" />
           </button>
@@ -147,10 +162,10 @@ const Weather = () => {
       {/* Main content */}
       <main className="container mx-auto px-4 py-8">
         {isLoading ? (
-          <Loader />
+          <Loader isLoading={isLoading} />
         ) : error ? (
-          <div className="text-center py-8">
-            <div className="bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 px-4 py-2 rounded-md">
+          <div className="text-center py-8 flex justify-center">
+            <div className="bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 w-60 py-2 rounded-md">
               {error}
             </div>
           </div>
@@ -169,7 +184,6 @@ const Weather = () => {
               <WeatherDetails weatherData={weatherData} />
             </div>
 
-            
             <div className="mb-12">
               <h2 className="text-xl font-bold mb-6 text-center text-gray-700 dark:text-white">
                 5-Day Forecast
@@ -181,7 +195,9 @@ const Weather = () => {
                     className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md text-center"
                   >
                     <p className="font-semibold dark:text-white">
-                      {new Date(day.dt * 1000).toLocaleDateString("en-US", { weekday: "short" })}
+                      {new Date(day.dt * 1000).toLocaleDateString("en-US", {
+                        weekday: "short",
+                      })}
                     </p>
                     <img
                       src={`https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`}
@@ -199,8 +215,7 @@ const Weather = () => {
               </div>
             </div>
 
-            {/* Search history */}
-            <section className="max-w-xs mx-auto">
+            <div className="max-w-xs mx-auto">
               <div className="font-medium text-lg p-2 bg-gray-200 dark:bg-gray-700 dark:text-white text-center rounded-t-md">
                 Search History
               </div>
@@ -216,12 +231,12 @@ const Weather = () => {
                       onClick={() => handleSearch(item)}
                       className="p-2 text-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 border-b border-gray-100 dark:border-gray-700"
                     >
-                      {item}
+                    <div className="text-white">{item}</div>
                     </li>
                   ))
                 )}
               </ul>
-            </section>
+            </div>
           </>
         )}
       </main>
