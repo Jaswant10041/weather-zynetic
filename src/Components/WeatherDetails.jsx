@@ -19,7 +19,7 @@ const WeatherDetails = (props) => {
         </div>
         <div className="flex flex-col p-2 sm:p-8 bg-gray-200 mx-auto rounded-md justify-center ml-3 mt-1 dark:bg-gray-700 dark:text-white">
           <label className="dark:text-gray-300">Humidity</label>
-          <p className="pt-1">{weatherData?.cityHumidity}%</p>
+          <p className="pt-1">{weatherData?.cityHumidity} %</p>
         </div>
         <div className="flex flex-col p-2 bg-gray-200 mx-auto rounded-md justify-center ml-3 mt-1 dark:bg-gray-700 dark:text-white">
           <label className="dark:text-gray-300">Wind Speed</label>

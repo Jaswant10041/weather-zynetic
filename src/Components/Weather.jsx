@@ -61,7 +61,7 @@ const Weather = () => {
       setError("Please enter a city name");
       return;
     }
-
+    setCity(cityName);
     setIsLoading(true);
     setError("");
 
@@ -69,8 +69,6 @@ const Weather = () => {
       await fetchWeatherDetails(cityName);
       const forecastData = await fetchForecast(cityName);
       setForecast(forecastData);
-
-      
     } catch (error) {
       console.error("Search error:", error);
       setError(
@@ -103,7 +101,9 @@ const Weather = () => {
         cityWeatherCondition: data.weather[0].main,
         cityWeatherIcon: data.weather[0].icon,
       });
-      if (history.length < 6) {
+      if (weatherData.cityName === "N/A") {
+        //do nothing
+      } else if (history.length < 6) {
         setHistory((prev) => [weatherData.cityName, ...prev]);
       } else {
         history.remove(history[history.length - 1]);
@@ -116,12 +116,7 @@ const Weather = () => {
   };
 
   return (
-    <div
-      className={`min-h-screen min-w-screen transition-colors duration-300 ${
-        darkMode ? "dark bg-gray-900" : "bg-red-200"
-      }`}
-    >
-      {/* Header with dark mode toggle */}
+    <div className={`min-h-screen w-full fixed inset-0 overflow-y-auto ${darkMode ? "bg-gray-900" : "bg-red-200"}`}>
       <header className="flex justify-end p-4">
         <button
           onClick={() => setDarkMode(!darkMode)}
@@ -185,9 +180,14 @@ const Weather = () => {
             </div>
 
             <div className="mb-12">
-              <h2 className="text-xl font-bold mb-6 text-center text-gray-700 dark:text-white">
-                5-Day Forecast
-              </h2>
+              {weatherData.cityName === "N/A" ? (
+                ""
+              ) : (
+                <h2 className="text-xl font-bold mb-6 text-center text-gray-700 dark:text-white">
+                  5-Day Forecast
+                </h2>
+              )}
+
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                 {forecast.map((day) => (
                   <div
@@ -231,7 +231,7 @@ const Weather = () => {
                       onClick={() => handleSearch(item)}
                       className="p-2 text-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 border-b border-gray-100 dark:border-gray-700"
                     >
-                    <div className="text-white">{item}</div>
+                      <div className="text-white">{item}</div>
                     </li>
                   ))
                 )}
